@@ -1,3 +1,5 @@
+require_relative 'cell'
+
 class Robodoku
   attr_accessor :puzzle, :solved
   attr_reader  :possible
@@ -74,21 +76,9 @@ class Robodoku
      
      new_value = (row_possibilities & column_possibilities & square_possibilities)
      
-     if new_value.count == 1
-       value = new_value.join.to_s
-     else 
-       value = " "
-     end 
-     value  
+     new_value.count == 1 ? value = new_value.join.to_s : value = " "  
    end
 
-   def solve_spots_row(puzzle, empty_spot)
-   end
-   def solve_spots_row(puzzle, empty_spot)
-   end
-   def solve_spots_row(puzzle, empty_spot)
-   end
-   
    def check_solution(puzzle)
       if puzzle.none? {|cell| cell.value == " "}
         @solved = true
@@ -124,39 +114,7 @@ class Robodoku
    end
 end
 
-class Row
-  attr_accessor :row
-
-  def initialize
-    @row = Array.new(9, Cell.new.cell)
-  end
-end
-
-class Board
-  attr_accessor :board
-
-  def initialize
-    @board= Array.new(9, Row.new.row)
-  end
-end
-
-class Cell
-  attr_accessor :value
-  attr_reader :row_number, :column_number, :square_number
-
-  def initialize(value, row_number, column_number)
-    @value = value
-    @row_number = row_number
-    @column_number = column_number
-    @square_number = calc_square(row_number, column_number)
-  end
-
-  def calc_square(row, column)
-    row/3 * 3 + 1 + column/3
-  end
-end
-
-puzzle2 = File.open('./puzzle5.txt')
+puzzle2 = File.open('./puzzles/puzzle5.txt')
 robo = Robodoku.new(puzzle2)
 sectioned = robo.parse_puzzle
 assigned = robo.assign_spots(sectioned)

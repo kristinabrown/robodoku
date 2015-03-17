@@ -70,5 +70,4 @@ class RobodokuTest < Minitest::Test
 
     assert_equal 90, robo.solve_puzzle(assigned)
   end
-
 end
