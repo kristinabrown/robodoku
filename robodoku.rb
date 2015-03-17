@@ -39,13 +39,6 @@ class Robodoku
     new_possible
   end
 
-   def find_row_number(empties_array)
-     empties_array.row_number
-    #  empties_array.map do |empty|
-    #    empty.row_number
-    #  end
-   end
-
    def find_row(puzzle, row_num)
      puzzle.select do |cell|
        cell.row_number == row_num.to_i
@@ -54,13 +47,13 @@ class Robodoku
 
    def find_column(puzzle, col_num)
      puzzle.select do |cell|
-       cell.column_number == col_num #join.to_i
+       cell.column_number == col_num
      end
    end
 
-   def find_column_number(empties_array)
-     empties_array.map do |empty|
-       empty.column_number
+   def find_square(puzzle, sq_num)
+     puzzle.select do |cell|
+       cell.square_number == sq_num
      end
    end
 
@@ -68,10 +61,16 @@ class Robodoku
      row_number = empty_spot.row_number
      row = find_row(assigned_puzzle, row_number)
      row_possibilities = find_new_possibilities(row)
+
      column_number = empty_spot.column_number
      column = find_column(assigned_puzzle, column_number)
      column_possibilities = find_new_possibilities(column)
-     (row_possibilities & column_possibilities).join
+
+     square_number = empty_spot.square_number
+     square = find_square(assigned_puzzle, square_number)
+     square_possibilities = find_new_possibilities(square)
+
+     (row_possibilities & column_possibilities & square_possibilities).first.to_s
    end
 
    def solve_puzzle(assigned_puzzle)
@@ -97,32 +96,6 @@ class Robodoku
        sum
      end
    end
-
-
-
-
-  # def check_row(row)
-  #   possibilities.reject do |num|
-  #     puzzle_sectioned.each do |element|
-  #       element.each do |spot|
-  #         num == spot
-  #       end
-  #     end
-  #   end
-  # end
-  #
-  # def check_row
-  #   new_possibilites = find_possibilites
-  #   puzzle_sectioned.map do |element|
-  #     element.each do |spot|
-  #       if spot == ""
-  #
-  #
-  #
-  #
-  # end
-
-
 end
 
 class Row
@@ -143,16 +116,21 @@ end
 
 class Cell
   attr_accessor :value
-  attr_reader :row_number, :column_number
+  attr_reader :row_number, :column_number, :square_number
 
   def initialize(value, row_number, column_number)
     @value = value
     @row_number = row_number
     @column_number = column_number
+    @square_number = calc_square(row_number, column_number)
+  end
+
+  def calc_square(row, column)
+    row/3 * 3 + 1 + column/3
   end
 end
 
-puzzle2 = File.open('./puzzle4.txt')
+puzzle2 = File.open('./puzzle5.txt')
 robo = Robodoku.new(puzzle2)
 sectioned = robo.parse_puzzle
 assigned = robo.assign_spots(sectioned)
