@@ -63,7 +63,6 @@ class RobodokuTest < Minitest::Test
   end
 
   def test_it_can_solve_a_puzzle
-    skip
     puzzle = File.open('./puzzle.txt')
     robo = Robodoku.new(puzzle)
     sectioned = robo.parse_puzzle

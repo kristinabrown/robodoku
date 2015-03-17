@@ -1,15 +1,16 @@
 class Robodoku
-  attr_accessor :puzzle
+  attr_accessor :puzzle, :solved
   attr_reader  :possible
 
   def initialize(puzzle)
-    @puzzle = puzzle.chars
+    @puzzle = puzzle
     @possible = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    @solved = false
   end
 
   def parse_puzzle
     puzzle_sectioned = []
-    puzzle.each_slice(10) { |section| puzzle_sectioned << section }
+    puzzle.each_char.each_slice(10) { |section| puzzle_sectioned << section }
     puzzle_sectioned.select { |section| section[0..-2] }
   end
 
@@ -25,9 +26,10 @@ class Robodoku
    end
 
    def find_empty(puzzle)
-     puzzle.detect do |cell|
+     empties = puzzle.select do |cell|
        cell.value == " "
      end
+     empties.sample
    end
 
    def find_new_possibilities(puzzle_row)
@@ -61,25 +63,49 @@ class Robodoku
      row_number = empty_spot.row_number
      row = find_row(assigned_puzzle, row_number)
      row_possibilities = find_new_possibilities(row)
-
+     
      column_number = empty_spot.column_number
      column = find_column(assigned_puzzle, column_number)
      column_possibilities = find_new_possibilities(column)
-
+     
      square_number = empty_spot.square_number
      square = find_square(assigned_puzzle, square_number)
      square_possibilities = find_new_possibilities(square)
+     
+     new_value = (row_possibilities & column_possibilities & square_possibilities)
+     
+     if new_value.count == 1
+       value = new_value.join.to_s
+     else 
+       value = " "
+     end 
+     value  
+   end
 
-     (row_possibilities & column_possibilities & square_possibilities).first.to_s
+   def solve_spots_row(puzzle, empty_spot)
+   end
+   def solve_spots_row(puzzle, empty_spot)
+   end
+   def solve_spots_row(puzzle, empty_spot)
+   end
+   
+   def check_solution(puzzle)
+      if puzzle.none? {|cell| cell.value == " "}
+        @solved = true
+      else
+        @solved = false
+      end
    end
 
    def solve_puzzle(assigned_puzzle)
-     number_of_empty_spots(assigned_puzzle).times do
+     check_solution(assigned_puzzle)
+     if @solved == false
        empty_spot = find_empty(assigned_puzzle)
        empty_spot.value = solve_spot(assigned_puzzle, empty_spot)
+       solve_puzzle(assigned_puzzle)
+     else
+       print_out_puzzle(assigned_puzzle)
      end
-
-    print_out_puzzle(assigned_puzzle)
    end
 
    def print_out_puzzle(assigned_puzzle)
