@@ -1,7 +1,7 @@
 require_relative 'cell'
 
 class Robodoku
-  attr_accessor :puzzle, :solved
+  attr_accessor :puzzle, :solved, :rows, :assigned_puzzle
   attr_reader  :possible
 
   def initialize(puzzle)
@@ -13,10 +13,11 @@ class Robodoku
   def parse_puzzle
     puzzle_sectioned = []
     puzzle.each_char.each_slice(10) { |section| puzzle_sectioned << section }
-    puzzle_sectioned.select { |section| section[0..-2] }
+    @rows = puzzle_sectioned.select { |section| section[0..-2] }
   end
 
-  def assign_spots(puzzle_sectioned)
+  def assign_spots(puzzle_sectioned = @rows)
+    @assigned_puzzle = 
     puzzle_sectioned.flat_map.with_index do |row, row_number|
        row.map.with_index do |value, column_number|
          Cell.new(value, row_number, column_number)
@@ -24,7 +25,7 @@ class Robodoku
      end
    end
 
-   def find_empty(puzzle)
+   def find_empty(puzzle = @assigned_puzzle)
      puzzle.select { |cell| cell.empty? }.sample
    end
 
@@ -55,20 +56,20 @@ class Robodoku
      end
    end
 
-   def solve_spot(assigned_puzzle, empty_spot)
+   def solve_spot(assigned_puzzle , empty_spot)
      row_number = empty_spot.row_number
      row = find_row(assigned_puzzle, row_number)
-     row_possibilities = find_new_possibilities(row)
+     row_possible = find_new_possibilities(row)
      
      column_number = empty_spot.column_number
      column = find_column(assigned_puzzle, column_number)
-     column_possibilities = find_new_possibilities(column)
+     column_possible = find_new_possibilities(column)
      
      square_number = empty_spot.square_number
      square = find_square(assigned_puzzle, square_number)
-     square_possibilities = find_new_possibilities(square)
+     square_possible = find_new_possibilities(square)
      
-     new_value = (row_possibilities & column_possibilities & square_possibilities)
+     new_value = (row_possible & column_possible & square_possible)
      
      new_value.count == 1 ? new_value.join : " "  
    end
@@ -77,7 +78,7 @@ class Robodoku
      puzzle.none? {|cell| cell.value == " "} ? @solved = true : @solved = false
    end
 
-   def solve_puzzle(assigned_puzzle)
+   def solve_puzzle(assigned_puzzle = @assigned_puzzle)
      check_solution(assigned_puzzle)
      if @solved == false
        empty_spot = find_empty(assigned_puzzle)

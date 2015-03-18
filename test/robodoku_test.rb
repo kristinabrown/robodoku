@@ -30,10 +30,10 @@ class RobodokuTest < Minitest::Test
   def test_it_can_find_empty_spots
     puzzle = File.open('./puzzles/puzzle.txt')
     robo = Robodoku.new(puzzle)
-    sectioned = robo.parse_puzzle
-    assigned = robo.assign_spots(sectioned)
+    robo.parse_puzzle
+    robo.assign_spots
     
-    assert_equal " ", robo.find_empty(assigned).value
+    assert_equal " ", robo.find_empty.value
   end
 
   def test_it_can_find_new_possibilities
@@ -51,8 +51,8 @@ class RobodokuTest < Minitest::Test
   def test_it_can_analyze_one_row
     puzzle = File.open('./puzzles/puzzle.txt')
     robo = Robodoku.new(puzzle)
-    sectioned = robo.parse_puzzle
-    assigned = robo.assign_spots(sectioned)
+    robo.parse_puzzle
+    assigned = robo.assign_spots
     spot = robo.find_empty(assigned)
 
     assert_equal "6", robo.solve_spot(assigned, spot)
@@ -61,10 +61,9 @@ class RobodokuTest < Minitest::Test
   def test_it_can_solve_a_puzzle
     puzzle = File.open('./puzzles/puzzle.txt')
     robo = Robodoku.new(puzzle)
-    sectioned = robo.parse_puzzle
-    assigned = robo.assign_spots(sectioned)
-    robo.solve_puzzle(assigned).chars
+    robo.parse_puzzle
+    robo.assign_spots
 
-    assert_equal 90, robo.solve_puzzle(assigned).chars.count
+    assert_equal 90, robo.solve_puzzle.chars.count
   end
 end
