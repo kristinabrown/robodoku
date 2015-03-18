@@ -7,6 +7,7 @@ class RobodokuTest < Minitest::Test
   def test_it_can_take_a_puzzle_from_a_file
     puzzle = File.open('./puzzles/puzzle.txt')
     robo = Robodoku.new(puzzle)
+    
     assert_equal 90, robo.puzzle.each_char.count
   end
 
@@ -14,6 +15,7 @@ class RobodokuTest < Minitest::Test
     puzzle = File.open('./puzzles/puzzle.txt')
     robo = Robodoku.new(puzzle)
     parsed_puzzle = robo.parse_puzzle
+    
     assert_equal 9, parsed_puzzle.count
   end
 
@@ -21,6 +23,7 @@ class RobodokuTest < Minitest::Test
     puzzle = File.open('./puzzles/puzzle.txt')
     robo = Robodoku.new(puzzle)
     sectioned = robo.parse_puzzle
+    
     assert_equal 90, robo.assign_spots(sectioned).count
   end
 
@@ -29,6 +32,7 @@ class RobodokuTest < Minitest::Test
     robo = Robodoku.new(puzzle)
     sectioned = robo.parse_puzzle
     assigned = robo.assign_spots(sectioned)
+    
     assert_equal " ", robo.find_empty(assigned).value
   end
 
@@ -49,8 +53,9 @@ class RobodokuTest < Minitest::Test
     robo = Robodoku.new(puzzle)
     sectioned = robo.parse_puzzle
     assigned = robo.assign_spots(sectioned)
+    spot = robo.find_empty(assigned)
 
-    assert_equal 6, robo.solve_spot(assigned).inspect
+    assert_equal "6", robo.solve_spot(assigned, spot)
   end
 
   def test_it_can_solve_a_puzzle
