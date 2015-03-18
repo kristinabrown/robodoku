@@ -5,7 +5,7 @@ class Robodoku
   attr_reader  :possible
 
   def initialize(puzzle)
-    @puzzle = puzzle
+    @puzzle = File.open(puzzle)
     @possible = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     @solved = false
   end
@@ -96,8 +96,8 @@ class Robodoku
    end
 end
 
-puzzle2 = File.open('./puzzles/puzzle6.txt')
-robo = Robodoku.new(puzzle2)
+
+robo = Robodoku.new('./puzzles/puzzle6.txt')
 sectioned = robo.parse_puzzle
 assigned = robo.assign_spots(sectioned)
 
