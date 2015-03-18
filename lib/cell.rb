@@ -12,4 +12,8 @@ class Cell
   def calc_square(row, column)
     row/3 * 3 + 1 + column/3
   end
+  
+  def empty?
+    value == " "
+  end
 end

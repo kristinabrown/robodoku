@@ -17,21 +17,15 @@ class Robodoku
   end
 
   def assign_spots(puzzle_sectioned)
-    new_array = []
-    puzzle_sectioned.each_with_index do |row, row_number|
-       row.each_with_index do |space, column_number|
-         value = space
-         new_array << Cell.new(value, row_number, column_number)
+    puzzle_sectioned.flat_map.with_index do |row, row_number|
+       row.map.with_index do |value, column_number|
+         Cell.new(value, row_number, column_number)
        end
      end
-     new_array
    end
 
    def find_empty(puzzle)
-     empties = puzzle.select do |cell|
-       cell.value == " "
-     end
-     empties.sample
+     puzzle.select { |cell| cell.empty? }.sample
    end
 
    def find_new_possibilities(puzzle_row)

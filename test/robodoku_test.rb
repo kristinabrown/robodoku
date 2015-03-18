@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require_relative 'robodoku'
+require './lib/robodoku'
 
 class RobodokuTest < Minitest::Test
 
