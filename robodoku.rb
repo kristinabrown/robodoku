@@ -76,15 +76,11 @@ class Robodoku
      
      new_value = (row_possibilities & column_possibilities & square_possibilities)
      
-     new_value.count == 1 ? value = new_value.join.to_s : value = " "  
+     new_value.count == 1 ? new_value.join : " "  
    end
 
    def check_solution(puzzle)
-      if puzzle.none? {|cell| cell.value == " "}
-        @solved = true
-      else
-        @solved = false
-      end
+     puzzle.none? {|cell| cell.value == " "} ? @solved = true : @solved = false
    end
 
    def solve_puzzle(assigned_puzzle)
@@ -103,18 +99,9 @@ class Robodoku
        cell.value
      end.join
    end
-
-   def number_of_empty_spots(assigned_puzzle)
-     assigned_puzzle.reduce(0) do |sum, cell|
-       if cell.value == " "
-         sum += 1
-       end
-       sum
-     end
-   end
 end
 
-puzzle2 = File.open('./puzzles/puzzle5.txt')
+puzzle2 = File.open('./puzzles/puzzle6.txt')
 robo = Robodoku.new(puzzle2)
 sectioned = robo.parse_puzzle
 assigned = robo.assign_spots(sectioned)
